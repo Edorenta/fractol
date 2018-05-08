@@ -20,20 +20,20 @@ void	plot_mandel(t_env *env)
 		env->x = -1;
 		while (++env->x < env->width)
 		{
-			env->cr = 2.5 * (env->x - env->mid_x) /
+			env->c_real = 2.5 * (env->x - env->mid_x) /
 			((env->width / 2) * env->zoom) - 0.73 + env->move_x;
-			env->cim = (env->y - env->mid_y) /
+			env->c_imaginary = (env->y - env->mid_y) /
 				(0.5 * (env->height / 2) * env->zoom) + env->move_y;
-			env->newr = 0;
-			env->newim = 0;
+			env->new_real = 0;
+			env->new_imaginary = 0;
 			env->i = -1;
 			while (++env->i < env->it)
 			{
-				env->oldr = env->newr;
-				env->oldim = env->newim;
-				env->newr = env->oldr * env->oldr - env->oldim * env->oldim + env->cr;
-				env->newim = 2 * env->oldr * env->oldim + env->cim;
-				if (env->newim * env->newim + env->newr * env->newr > 4)
+				env->prev_real = env->new_real;
+				env->prev_imaginary = env->new_imaginary;
+				env->new_real = env->prev_real * env->prev_real - env->prev_imaginary * env->prev_imaginary + env->c_real;
+				env->new_imaginary = 2 * env->prev_real * env->prev_imaginary + env->c_imaginary;
+				if (env->new_imaginary * env->new_imaginary + env->new_real * env->new_real > 4)
 					break ;
 			}
 			sketch(env, env->i, env->x, env->y);

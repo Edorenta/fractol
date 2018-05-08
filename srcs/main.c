@@ -33,6 +33,11 @@ int					key_hook(int key_code, t_env *env)
 	key_code == KEY_RIGHT ? env->move_x -= 0.1 : 0;
 	key_code == KEY_DOWN ? env->move_y -= 0.1 : 0;
 	key_code == KEY_UP ? env->move_y += 0.1 : 0;
+	(key_code == KEY_PERIOD && env->min_iter >= 0) ? env->min_iter-- : 0;
+	(key_code == KEY_COMMA && env->min_iter <= env->it) ? env->min_iter++ : 0;
+	key_code == KEY_C ? env->clr_shift++ : 0;
+	key_code == KEY_R ? env->clr_range++ : 0;
+	key_code == KEY_O ? env->opacity++ : 0;
 	if (key_code == KEY_ESCAPE)
 	{
 		pstr("Exit program\n");
@@ -44,14 +49,13 @@ int					key_hook(int key_code, t_env *env)
 	return (0);
 }
 
-int					mouse_scroll_hook(int key_code, int x, int y, t_env *env)
+int					mouse_sc_realoll_hook(int key_code, int x, int y, t_env *env)
 {
 	env->mouse_x = x;
 	env->mouse_y = y;
 	key_code == LEFT_CLICK ? env->fl = 1 : 0;
 	key_code == SCROLL_DOWN ? zoom_in(env) : 0;
 	key_code == SCROLL_UP ? zoom_out(env) : 0;
-	//env->img = mlx_new_image(env->mlx, env->width, env->height);
 	IS_SET_JULIA ? plot_julia(env) : 0;
 	IS_SET_MANDEL ? plot_mandel(env) : 0;
 	IS_SET_BSHIP ? plot_burnship(env) : 0;
@@ -77,6 +81,10 @@ static inline int	compliant_av(t_env *env, int ac, char **av)
 			SWITCH_BSHIP;
 		else
 			return (0);
+	env->min_iter = 7;
+	env->clr_shift = 0;
+	env->clr_range = 0;
+	env->opacity = 0;
 	return (1);
 }
 
@@ -86,7 +94,7 @@ int					main(int ac, char **av)
 
 	if (ac < 2 || ac > 4 || !compliant_av(&env, ac, av))
 	{
-		pstr("Options:\n\t-Mandel\t(1)\n\t-Julia\t(2)\n\t-Burnship\t(3)\n");
+		pstr("Options:\n\t-Mandel\t\t(1)\n\t-Julia\t\t(2)\n\t-Burnship\t(3)\n");
 		exit(1);
 	}
 	if (ac > 2)
@@ -107,7 +115,7 @@ int					main(int ac, char **av)
 	env.win = mlx_new_window(env.mlx, env.width, env.height, "Fractol");
 	env.img = mlx_new_image(env.mlx, env.width, env.height);
 	mlx_hook(env.win, 2, 0, key_hook, &env);
-	mlx_hook(env.win, 4, 0, mouse_scroll_hook, &env);
+	mlx_hook(env.win, 4, 0, mouse_sc_realoll_hook, &env);
 	mlx_hook(env.win, 6, 0, mouse_hook, &env);
 	mlx_loop(env.mlx);
 	return (0);

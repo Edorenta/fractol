@@ -22,18 +22,18 @@ void	plot_julia(t_env *env)
 		env->x = -1;
 		while (++env->x < env->width)
 		{
-			env->newr = 2.5 * (env->x - env->mid_x) /
+			env->new_real = 2.5 * (env->x - env->mid_x) /
 			((env->width / 2) * env->zoom) + env->move_x;
-			env->newim = (env->y - env->mid_y) /
+			env->new_imaginary = (env->y - env->mid_y) /
 			((env->height / 2) * env->zoom) + env->move_y;
 			i = -1;
 			while (++i < env->it)
 			{
-				env->oldr = env->newr;
-				env->oldim = env->newim;
-				env->newr = env->oldr * env->oldr - env->oldim * env->oldim + env->cr;
-				env->newim = 2 * env->oldr * env->oldim + env->cim;
-				if (env->newim * env->newim + env->newr * env->newr > 4)
+				env->prev_real = env->new_real;
+				env->prev_imaginary = env->new_imaginary;
+				env->new_real = env->prev_real * env->prev_real - env->prev_imaginary * env->prev_imaginary + env->c_real;
+				env->new_imaginary = 2 * env->prev_real * env->prev_imaginary + env->c_imaginary;
+				if (env->new_imaginary * env->new_imaginary + env->new_real * env->new_real > 4)
 					break ;
 			}
 			sketch(env, i, env->x, env->y);
@@ -45,8 +45,8 @@ void	up_julia(t_env *env)
 {
 	if (env->fl == 1)
 	{
-		env->cr = (double)env->mouse_x / env->width * 4 - 2;
-		env->cim = (double)env->mouse_y / env->height * 4 - 2;
+		env->c_real = (double)env->mouse_x / env->width * 4 - 2;
+		env->c_imaginary = (double)env->mouse_y / env->height * 4 - 2;
 	}
 	filltab(env->img_tab, BLACK, env->width * env->height);
 	plot_julia(env);

@@ -17,7 +17,7 @@ SRCS_PATH	= srcs/
 OBJS_PATH	= objs/
 I_PATH		= -Ilibclr/include -Iinclude
 FLAGS		= -Wall
-FLAGS_DBG	= -Wall -Werror -Wextra -O3 -g -fsanitize=address
+FLAGS_DBG	= -Wall -Werror -Wextra -O3 -g #-fsanitize=address
 CC			= gcc $(FLAGS)
 CC_DBG		= gcc $(FLAGS_DBG)
 ifeq ($(shell uname -s), Darwin)
